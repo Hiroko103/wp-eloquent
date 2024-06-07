@@ -306,7 +306,11 @@ class Database implements ConnectionInterface
     {
         $result = $this->db->query($query);
 
-        return ($result === false || $this->db->last_error);
+        if ($result === false || $this->db->last_error) {
+            throw new QueryException($query, [], new \Exception($this->db->last_error));
+        }
+
+        return $result;
     }
 
     /**
